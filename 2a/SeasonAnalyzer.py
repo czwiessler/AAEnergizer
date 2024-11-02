@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load the data
-data = pd.read_csv("data/charging_sessions.csv", parse_dates=["connectionTime", "disconnectTime", "doneChargingTime"])
+data = pd.read_csv("../data/charging_sessions.csv", parse_dates=["connectionTime", "disconnectTime", "doneChargingTime"])
 
 # Extract time-related features for analysis
 data['hour'] = data['connectionTime'].dt.hour
