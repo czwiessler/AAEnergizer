@@ -24,7 +24,8 @@ site_one_kWh_means = site_one_kWh_means.reindex(ordered_days)
 site_two_kWh_means = site_two_kWh_means.reindex(ordered_days)
 
 # Set up duration bins in 15-minute intervals
-duration_bins = list(range(0, int(dataFrame["duration"].max() // 15 + 1) * 15 + 1, 15))  # e.g., 0, 15, 30, ..., max duration in dataset
+# duration_bins = list(range(0, int(dataFrame["duration"].max() // 15 + 1) * 15 + 1, 15))  # e.g., 0, 15, 30, ..., max duration in dataset
+duration_bins = list(range(0, 1020, 15)) #1020 weil ausreißer (duration größer 17h) interessieren nich
 
 # Bin the durations and calculate the count of sessions in each duration bin
 dfSiteOne["duration_bin"] = pd.cut(dfSiteOne["duration"], bins=duration_bins, right=False)
