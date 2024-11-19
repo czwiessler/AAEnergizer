@@ -1,7 +1,7 @@
 import pandas as pd
 
 def add_charging_power():
-    dataFrame = pd.read_csv("../../data/charging_sessions_cleaned.csv", parse_dates=["connectionTime", "disconnectTime", "doneChargingTime"])
+    dataFrame = pd.read_csv("data/charging_sessions_cleaned.csv", parse_dates=["connectionTime", "disconnectTime", "doneChargingTime"])
 
     # Add a new column chargingPower (Ladeleistung in kW)
     dataFrame["chargingPower"] = .0
@@ -23,7 +23,7 @@ def add_charging_power():
 
 
     #save to csv
-    dataFrame.to_csv("../../data/charging_sessions_cleaned.csv", index=False)
+    dataFrame.to_csv("data/charging_sessions_cleaned.csv", index=False)
 
 
 
