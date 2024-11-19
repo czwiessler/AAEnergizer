@@ -1,19 +1,25 @@
-To prepare the dataset of charging sessions for analysis, I followed these steps:
+To prepare the dataset of charging sessions for analysis, we followed these steps:
 
 1. **Data Ingestion:** 
-    I loaded the dataset into a data frame for easier manipulation and access. 
-    Ensuring all columns were correctly typed, especially date and time columns (`connectionTime`, `disconnectTime`, and `doneChargingTime`), was critical to facilitate analysis.
+    We loaded the dataset into a dataframe for easier manipulation and access. 
+    Ensuring all columns were correctly typed, especially date and time columns 
+    (`connectionTime`, `disconnectTime`, and `doneChargingTime`), was critical to facilitate analysis.
 
 2. **Initial Inspection and Summary Statistics:** 
-    I conducted an initial overview, reviewing summary statistics and scanning for any clear irregularities or patterns in the data that might indicate issues. 
+    We conducted an initial overview, reviewing summary statistics and scanning for any clear irregularities or patterns in the data that might indicate issues. 
     This also involved checking column values to ensure they aligned with expected ranges (e.g., `kWhDelivered` should be non-negative).
 
 3. **Handling Missing Data:** 
     For missing values, I used different strategies based on the column:
-   - **Time-related fields** (`connectionTime`, `disconnectTime`, `doneChargingTime`): 
+   - **Time-related fields** (`connectionTime`, `disconnectTime`): 
        If missing, these would create gaps in understanding session flow, so I examined records with missing values. 
        If feasible, I interpolated times based on other sessions with similar attributes. 
        For sessions with completely missing timestamps, I excluded them if they were minor in count or appeared erroneous.
+       We found that some 
+     - **`doneChargingTime`**
+         It is possible that some sessions do not have a `doneChargingTime` because the vehicle was not fully charged.
+         We found that in some cases, the `disconnectTime` was before the `doneChargingTime`, which is not logical.
+          In such cases, we corrected the `doneChargingTime` to be equal to the `disconnectTime`.
    - **Numerical fields** (`kWhDelivered`): 
        For missing values here, I used median or mean values per site and session context, 
        which helped in maintaining accuracy without introducing bias.
