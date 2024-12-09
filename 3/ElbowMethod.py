@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 
 
-df = pd.read_csv("../data/charging_sessions_cleaned.csv")
+df = pd.read_csv("../data/processed/charging_sessions_cleaned.csv")
 #Filter important values
 df_cleaned = df[(df['duration'] <= 100) & (df['kWhDelivered'] <= 100)]
 #Select columns for clustering

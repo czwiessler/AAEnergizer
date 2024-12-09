@@ -2,7 +2,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sb
 
-dataFrame = pd.read_csv("../data/charging_sessions.csv", parse_dates=["connectionTime", "disconnectTime", "doneChargingTime"])
+dataFrame = pd.read_csv("../data/raw/charging_sessions.csv", parse_dates=["connectionTime", "disconnectTime", "doneChargingTime"])
 
 dataFrame["duration"] = dataFrame["disconnectTime"] - dataFrame["connectionTime"]
 
