@@ -4,6 +4,7 @@ import src.data.operations.C_add_durations_set_negatives_to_zero as C_add_durati
 import src.data.operations.D_turn_durations_into_floats_representing_hours as D_turn_durations_into_floats_representing_hours
 import src.data.operations.E_add_charging_power as E_add_charging_power
 import src.data.operations.F_remove_spaceID as F_remove_spaceID
+import src.data.operations.G_add_utilization as G_add_utilization
 import pandas as pd
 
 def preprocess_dataset():
@@ -16,6 +17,8 @@ def preprocess_dataset():
     D_turn_durations_into_floats_representing_hours.turn_durations_into_floats_representing_hours(dataset_path=processed_dataset_path)
     E_add_charging_power.add_charging_power(dataset_path=processed_dataset_path)
     F_remove_spaceID.remove_spaceID(dataset_path=processed_dataset_path)
+
+    G_add_utilization.add_utilization(dataset_path=processed_dataset_path)
 
     print("Preprocessing done.")
 
