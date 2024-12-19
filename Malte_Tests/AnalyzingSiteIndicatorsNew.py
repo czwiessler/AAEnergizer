@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import seaborn as sb
 
 # Load and preprocess data
-dataFrame = pd.read_csv("../data/charging_sessions.csv", parse_dates=["connectionTime", "disconnectTime", "doneChargingTime"])
+dataFrame = pd.read_csv("../data/raw/charging_sessions.csv", parse_dates=["connectionTime", "disconnectTime", "doneChargingTime"])
 dataFrame["duration"] = (dataFrame["disconnectTime"] - dataFrame["connectionTime"]).dt.total_seconds() / 60  # Convert duration to minutes
 
 # Split by site

@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Read the data
-data = pd.read_csv('../data/charging_sessions.csv')
+data = pd.read_csv('../data/raw/charging_sessions.csv')
 
 # Parse datetime columns (they are in UTC)
 data['connectionTime'] = pd.to_datetime(data['connectionTime'], utc=True)
