@@ -7,6 +7,11 @@ import data_operations.operations.F_remove_spaceID as F_remove_spaceID
 import pandas as pd
 
 def preprocess_dataset():
+    """
+    runs data operations from "operations" folder in alphabetical order and returns the preprocessed dataset.\n
+    If new operations are added in the "operations" folder, please call them here.
+    """
+
     A_copy_csv.copy_csv()
     B_remove_two_big_time_difference_rows.remove_two_big_time_difference_rows()
     C_add_durations_set_negatives_to_zero.add_durations_set_negatives_to_zero()
