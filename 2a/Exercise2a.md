@@ -1,3 +1,8 @@
+*Exercise: Temporal Patterns and Seasonality: Demonstrate how the number of charging events varies during
+ the day, the week, and between seasons. What patterns can you observe, and how do you explain
+ them?*
+
+
 To prepare the dataset of charging sessions for analysis, we followed these steps:
 
 1. **Data Ingestion:** 
