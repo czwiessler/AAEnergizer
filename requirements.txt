@@ -4,3 +4,5 @@ numpy
 seaborn
 scikit-learn
 jupyter
+pytz
+joblib
