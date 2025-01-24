@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load data
-file_path = 'data/weather_burbank_airport.csv'
+file_path = 'data/raw/weather_burbank_airport.csv'
 weather_data = pd.read_csv(file_path)
 
 # Parse timestamp column
