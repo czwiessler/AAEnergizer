@@ -44,8 +44,8 @@ for site_id in site_ids:
 
         # Generate hourly periods overlapping the session in UTC
         session_hours = pd.date_range(
-            start=connect_time.floor('H'),
-            end=disconnect_time.ceil('H'),
+            start=connect_time.floor('h'),
+            end=disconnect_time.ceil('h'),
             freq='h',
             tz='UTC'
         )
