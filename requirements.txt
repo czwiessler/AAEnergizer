@@ -11,3 +11,5 @@ pytorch-lightning
 mlflow
 plotly
 pmdarima
+#mpld3
+plotly

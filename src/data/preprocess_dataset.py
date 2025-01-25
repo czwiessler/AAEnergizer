@@ -31,7 +31,7 @@ def preprocess_dataset():
 
     I_prepare_nn_ds.prepare_nn_ds(dataset_path=nn_dataset_path)
 
-    Z_cut_ds.cut_ds(dataset_path=nn_dataset_path, start_date="2018-04-25", end_date="2020-03-01")
+    Z_cut_ds.cut_ds(dataset_path=nn_dataset_path, start_date="2018-09-05", end_date="2020-03-01")
 
     print("Preprocessing done.")
 
