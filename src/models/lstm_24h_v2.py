@@ -43,6 +43,8 @@ class UtilizationPredictor(pl.LightningModule):
         out = out[:, -1, :]      # (batch_size, hidden_size)
         # In "forecast_horizon * output_size" umwandeln
         out = self.fc(out)       # (batch_size, forecast_horizon * output_size)
+        # relu to avoid negative values
+        out = torch.relu(out)
         # Form anpassen: (batch_size, forecast_horizon, output_size)
         return out.view(-1, self.forecast_horizon, int(out.shape[1]/self.forecast_horizon))
 
@@ -83,6 +85,9 @@ train_df = df.iloc[:train_size].copy()
 val_df   = df.iloc[train_size:train_size+val_size].copy()
 test_df  = df.iloc[train_size+val_size:].copy()
 
+# save the test_df for later use
+test_df.to_csv("data/processed/test_dataset_shifted.csv", index=False)
+
 # (b) Spalten definieren
 target_columns = [
     'avgChargingPower_site_1', 'activeSessions_site_1',
@@ -90,10 +95,12 @@ target_columns = [
 ]
 # Beispiel-Feature-Spalten
 # Du kannst/ solltest hier mehr Variablen einbauen (z. B. day_of_week, holiday, etc.)
-feature_columns = ['temperature', 'precipitation', 'hour_sin', 'hour_cos']
+#feature_columns = ['temperature', 'precipitation', 'hour_sin', 'hour_cos', 'is_holiday', 'is_weekend', 'is_vacation']
+feature_columns = ['hour_sin', 'hour_cos', 'is_holiday', 'is_weekend', 'is_vacation']
+#feature_columns = ['is_holiday', 'is_weekend', 'is_vacation']
 
 # z.B.:
-dummies = [col for col in df.columns if col.startswith('day_of_week_') or col.startswith('hour_of_day_')]
+dummies = [col for col in df.columns if col.startswith('day_of_week_')]# or col.startswith('hour_of_day_')]
 feature_columns += dummies
 
 # (c) Skalierung (MinMaxScaler nur auf Trainingsdaten fitten!)
@@ -145,7 +152,7 @@ if __name__ == '__main__':
         mode="min",
     )
     trainer = pl.Trainer(
-        max_epochs=10,         # deutlich mehr als 10
+        max_epochs=100,         # deutlich mehr als 10
         log_every_n_steps=1,
         callbacks = [checkpoint_callback]
     )

@@ -14,6 +14,12 @@ def add_holidays(df):
     df['is_weekend'] = df['hour'].dt.weekday.apply(lambda x: 1 if x >= 5 else 0)
     df['is_vacation'] = df['hour'].dt.month.apply(lambda x: 1 if x in [6, 7, 8, 12] else 0)
 
+    # verschiebe die zeilen holiday weekend und vac 24 stunden nach oben, da wir zukünftige werte vorhersagen wollen
+    df['is_holiday'] = df['is_holiday'].shift(-24)
+    df['is_weekend'] = df['is_weekend'].shift(-24)
+    df['is_vacation'] = df['is_vacation'].shift(-24)
+
+
     def season(month):
         if month in [12, 1, 2]:
             return 'Winter'
