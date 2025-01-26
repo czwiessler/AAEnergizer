@@ -12,7 +12,7 @@ import src.data.operations.I_prepare_nn_ds as I_prepare_nn_ds
 import src.data.operations.Z_cut_ds as Z_cut_ds
 import pandas as pd
 
-def preprocess_dataset():
+def preprocess_dataset(omit_task_4_specific_operations: bool =False):
     raw_dataset_path = "data/raw/charging_sessions.csv"
     raw_weather_dataset_path = "data/raw/weather_burbank_airport.csv"
     processed_dataset_path = "data/processed/charging_sessions_cleaned.csv"
@@ -24,6 +24,11 @@ def preprocess_dataset():
     D_turn_durations_into_floats_representing_hours.turn_durations_into_floats_representing_hours(dataset_path=processed_dataset_path)
     E_add_charging_power.add_charging_power(dataset_path=processed_dataset_path)
     F_remove_spaceID.remove_spaceID(dataset_path=processed_dataset_path)
+
+    if omit_task_4_specific_operations == True:
+        print("Preprocessing done, left out task 4-specific operations.")
+        df = pd.read_csv(processed_dataset_path)
+        return df
 
     G_add_utilization.add_utilization(dataset_path=processed_dataset_path)
 
@@ -42,5 +47,5 @@ def preprocess_dataset():
 
 
 if __name__ == "__main__":
-    preprocess_dataset()
+    preprocess_dataset(True)
 
