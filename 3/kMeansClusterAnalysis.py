@@ -4,6 +4,7 @@ from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import ast
+import numpy as np
 
 # CSV-Daten laden
 file_path = "../data/processed/charging_sessions_cleaned.csv"
@@ -12,6 +13,10 @@ df = pd.read_csv(file_path, parse_dates=["connectionTime", "disconnectTime"])
 # Feature-Engineering
 df['duration'] = (df['disconnectTime'] - df['connectionTime']).dt.total_seconds() / 3600
 df['hourOfDay'] = df['connectionTime'].dt.hour
+
+# Zyklische Transformation der Stunde
+df['hour_sin'] = np.sin(2 * np.pi * df['hourOfDay'] / 24)
+df['hour_cos'] = np.cos(2 * np.pi * df['hourOfDay'] / 24)
 
 def extract_wh_per_mile(user_inputs):
     try:
@@ -29,9 +34,10 @@ df['WhPerMile'] = df['userInputs'].apply(lambda x: extract_wh_per_mile(x))
 clustering_configurations = [
     (['kWhDelivered', 'chargingPower'], 3),
     (['chargingPower', 'kWhDelivered'], 3),
-    (['hourOfDay', 'chargingPower'], 3),
-    (['chargingPower', 'hourOfDay'], 3)
-
+    (['hour_sin', 'hour_cos', 'chargingPower'], 3),  # Verwendung der zyklischen Transformation
+    (['chargingPower', 'hour_sin', 'hour_cos'], 3),  # Verwendung der zyklischen Transformation
+    (['hour_sin', 'hour_cos', 'duration'], 4),  # Verwendung der zyklischen Transformation
+    (['duration', 'hour_sin', 'hour_cos'], 4)  # Verwendung der zyklischen Transformation
 ]
 
 # Daten normalisieren und Clustering durchführen
