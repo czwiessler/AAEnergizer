@@ -25,7 +25,7 @@ def preprocess_dataset():
     E_add_charging_power_remove_outliers.add_charging_power_remove_outliers(dataset_path=processed_dataset_path)
     F_remove_spaceID.remove_spaceID(dataset_path=processed_dataset_path)
 
-    G_add_utilization.add_utilization(dataset_path=processed_dataset_path)
+    #G_add_utilization.add_utilization(dataset_path=processed_dataset_path)
 
     H_create_nn_ds.create_nn_ds(dataset_path=processed_dataset_path,
                                 weather_dataset_path=raw_weather_dataset_path,
