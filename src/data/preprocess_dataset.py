@@ -4,7 +4,7 @@ import src.data.operations.A_copy_csv as A_copy_csv
 import src.data.operations.B_remove_single_rows_with_implausible_timestamps as B_remove_single_rows_with_implausible_timestamps
 import src.data.operations.C_add_durations_set_negatives_to_zero as C_add_durations_set_negatives_to_zero
 import src.data.operations.D_turn_durations_into_floats_representing_hours as D_turn_durations_into_floats_representing_hours
-import src.data.operations.E_add_charging_power as E_add_charging_power
+import src.data.operations.E_add_charging_power_remove_outliers as E_add_charging_power_remove_outliers
 import src.data.operations.F_remove_spaceID as F_remove_spaceID
 import src.data.operations.G_add_utilization as G_add_utilization
 import src.data.operations.H_create_nn_ds as H_create_nn_ds
@@ -22,7 +22,7 @@ def preprocess_dataset():
     B_remove_single_rows_with_implausible_timestamps.remove_single_rows_with_implausible_timestamps(dataset_path=processed_dataset_path)
     C_add_durations_set_negatives_to_zero.add_durations_set_negatives_to_zero(dataset_path=processed_dataset_path)
     D_turn_durations_into_floats_representing_hours.turn_durations_into_floats_representing_hours(dataset_path=processed_dataset_path)
-    E_add_charging_power.add_charging_power(dataset_path=processed_dataset_path)
+    E_add_charging_power_remove_outliers.add_charging_power_remove_outliers(dataset_path=processed_dataset_path)
     F_remove_spaceID.remove_spaceID(dataset_path=processed_dataset_path)
 
 
