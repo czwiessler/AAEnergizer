@@ -41,18 +41,15 @@ def create_nn_ds(dataset_path, weather_dataset_path, nn_dataset_path):
 
     df['connectionTime'] = pd.to_datetime(df['connectionTime'])
     df['disconnectTime'] = pd.to_datetime(df['disconnectTime'])
-    df['hourly_timestamp'] = df['connectionTime'].dt.floor('h')
     weather_df['timestamp'] = pd.to_datetime(weather_df['timestamp']) - pd.Timedelta(hours=8)
     weather_df['hourly_timestamp'] = weather_df['timestamp'].dt.floor('h')
-
-    df['hourly_timestamp'] = df['hourly_timestamp'].dt.tz_localize(None)
-    weather_df['hourly_timestamp'] = weather_df['hourly_timestamp'].dt.tz_localize(None)
 
     weather_df = weather_df.groupby('hourly_timestamp').agg({
         'temperature': 'mean',
         'precipitation': 'mean'
     }).interpolate(method='linear').reset_index()
 
+    # Berechne alle Stunden im Zeitintervall
     time_intervals = pd.date_range(
         start=df['connectionTime'].min().floor('h'),
         end=df['disconnectTime'].max().ceil('h'),
@@ -60,51 +57,46 @@ def create_nn_ds(dataset_path, weather_dataset_path, nn_dataset_path):
     )
 
     site_ids = df['siteID'].unique()
-    hourly_data = {site_id: [] for site_id in site_ids}
-    print("Creating hourly data structure...")
-    for site_id in site_ids:
-        hourly_data[site_id] = [
-            {
-                'hour': start_time,
-                f'avgChargingPower_site_{site_id}': 0,
-                f'activeSessions_site_{site_id}': 0
-            }
-            for start_time in time_intervals
-        ]
+    hourly_data = []
 
-    print("Calculating hourly active sessions...")
-    i = 0
+    print("Berechnung stündlicher aktiver Sessions und Ladeleistung...")
+    i=0
     for start_time in time_intervals:
-        end_time = start_time + pd.Timedelta(hours=1)
-        for site_id in site_ids:
-            site_df = df[df['siteID'] == site_id]
-            active_sessions = site_df[
-                (site_df['connectionTime'] < end_time) & (site_df['disconnectTime'] > start_time)
-            ]
-            if not active_sessions.empty:
-                avg_power = active_sessions['chargingPower'].mean()
-                max_active_sessions = active_sessions['active_sessions'].max()
-
-                for entry in hourly_data[site_id]:
-                    if entry['hour'] == start_time:
-                        entry[f'avgChargingPower_site_{site_id}'] = avg_power
-                        entry[f'activeSessions_site_{site_id}'] = max_active_sessions
-
         i += 1
         if i % 500 == 0:
             print(f"Processed {i}/{len(time_intervals)} hours...")
+        end_time = start_time + pd.Timedelta(hours=1)
+        row = {'hour': start_time}
 
-    hourly_data_dfs = []
-    for site_id, data in hourly_data.items():
-        site_df = pd.DataFrame(data)
-        site_df['hour'] = pd.to_datetime(site_df['hour']).dt.tz_localize(None)
-        hourly_data_dfs.append(site_df)
+        for site_id in site_ids:
+            # Filter für aktive Sessions
+            site_df = df[df['siteID'] == site_id]
+            active_sessions = site_df[
+                (site_df['connectionTime'] < end_time) & (site_df['disconnectTime'] > start_time)
+                ]
 
-    merged_df = pd.concat(hourly_data_dfs, axis=1).loc[:, ~pd.concat(hourly_data_dfs, axis=1).columns.duplicated()]
+            avg_power = active_sessions['chargingPower'].mean() if not active_sessions.empty else 0
+            active_session_count = len(active_sessions)
 
-    merged_df = pd.merge(merged_df, weather_df, left_on='hour', right_on='hourly_timestamp', how='left')
-    merged_df = add_holidays(merged_df)
-    merged_df.drop(columns=['hourly_timestamp'], inplace=True)
-    merged_df.to_csv(nn_dataset_path, index=False)
+            row[f'avgChargingPower_site_{site_id}'] = avg_power
+            row[f'activeSessions_site_{site_id}'] = active_session_count
 
-    return merged_df
+        hourly_data.append(row)
+
+    hourly_df = pd.DataFrame(hourly_data)
+    hourly_df['hour'] = hourly_df['hour'].dt.tz_localize(None)
+    weather_df['hourly_timestamp'] = weather_df['hourly_timestamp'].dt.tz_localize(None)
+
+    # Merging Wetterdaten
+    hourly_df = pd.merge(hourly_df, weather_df, left_on='hour', right_on='hourly_timestamp', how='left')
+    hourly_df.drop(columns=['hourly_timestamp'], inplace=True)
+
+    # jetzt ist jede uhrzeit 2 mal da und es ist immer entweder die eine oder die andere siteID gefüllt, die andere ist null
+
+    # Feiertage hinzufügen (falls implementiert)
+    hourly_df = add_holidays(hourly_df)
+
+    # Speichern der Ergebnisse
+    hourly_df.to_csv(nn_dataset_path, index=False)
+
+    return hourly_df
