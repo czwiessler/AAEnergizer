@@ -72,7 +72,7 @@ def create_nn_ds(dataset_path, weather_dataset_path, nn_dataset_path):
             for start_time in time_intervals
         ]
 
-    print("Calculating hourly average power and active sessions...")
+    print("Calculating hourly active sessions...")
     i = 0
     for start_time in time_intervals:
         end_time = start_time + pd.Timedelta(hours=1)
