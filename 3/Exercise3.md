@@ -27,3 +27,4 @@ The silhouette score of 0.48 suggests that there is room for improvement.
 In the next steps, we plan to experiment with different clustering algorithms, 
 such as DBSCAN or hierarchical clustering, and potentially refining the feature selection or scaling methods.
 
+siteid mit 3+ attributen
