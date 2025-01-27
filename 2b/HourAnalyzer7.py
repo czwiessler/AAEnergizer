@@ -29,7 +29,7 @@ for idx, row in data.iterrows():
 
     # Generate hourly periods overlapping the charging session
     session_hours = pd.date_range(
-        start=connect_time.floor('h'), # flo
+        start=connect_time.floor('h'),
         end=done_charging_time.ceil('h'),
         freq='h',
         tz='UTC'
