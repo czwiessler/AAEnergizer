@@ -167,7 +167,7 @@ if __name__ == "__main__":
     test_batches = prepare_24h_batches(df_test, start_hour=0)
 
     # Checkpoint-Pfad
-    ckpt_path = "models/24h-model-epoch=275-val_loss=10.99156.ckpt"
+    ckpt_path = "models/24h-model-epoch=268-val_loss=30.85890.ckpt"
 
     # Vorhersagen und Plot generieren
     generate_plots_for_24h_predictions(
