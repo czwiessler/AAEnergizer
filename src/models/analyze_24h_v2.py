@@ -149,7 +149,7 @@ if __name__ == "__main__":
     #dummies = ['day_of_week_0', 'day_of_week_1', 'day_of_week_2', 'day_of_week_3', 'day_of_week_4', 'day_of_week_5', 'day_of_week_6', 'hour_of_day_0', 'hour_of_day_1', 'hour_of_day_2', 'hour_of_day_3', 'hour_of_day_4', 'hour_of_day_5', 'hour_of_day_6', 'hour_of_day_7', 'hour_of_day_8', 'hour_of_day_9', 'hour_of_day_10', 'hour_of_day_11', 'hour_of_day_12', 'hour_of_day_13', 'hour_of_day_14', 'hour_of_day_15', 'hour_of_day_16', 'hour_of_day_17', 'hour_of_day_18', 'hour_of_day_19', 'hour_of_day_20', 'hour_of_day_21', 'hour_of_day_22', 'hour_of_day_23']
     dummies = ['day_of_week_0', 'day_of_week_1', 'day_of_week_2', 'day_of_week_3', 'day_of_week_4', 'day_of_week_5', 'day_of_week_6']
     input_columns += dummies
-    sequence_length = 24
+    sequence_length = 240
 
     # Testdaten laden
     df_test = pd.read_csv("data/processed/test_dataset_shifted.csv", parse_dates=["hour"])
@@ -158,14 +158,16 @@ if __name__ == "__main__":
 
     scaler_features = joblib.load('models/scaler_features.pkl')
     scaler_targets = joblib.load('models/scaler_targets.pkl')
-    df_test[input_columns] = scaler_features.transform(df_test[input_columns])
-    df_test[target_columns] = scaler_targets.transform(df_test[target_columns])
+    df_test[input_columns] = df_test[input_columns].astype('float32')
+    df_test[target_columns] = df_test[target_columns].astype('float32')
+    #df_test[input_columns] = scaler_features.transform(df_test[input_columns])
+    #df_test[target_columns] = scaler_targets.transform(df_test[target_columns])
 
     # 24h-Batches vorbereiten
     test_batches = prepare_24h_batches(df_test, start_hour=0)
 
     # Checkpoint-Pfad
-    ckpt_path = "models/24h-model-epoch=91-val_loss=0.01182.ckpt"
+    ckpt_path = "models/24h-model-epoch=275-val_loss=10.99156.ckpt"
 
     # Vorhersagen und Plot generieren
     generate_plots_for_24h_predictions(

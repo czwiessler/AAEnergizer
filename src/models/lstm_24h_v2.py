@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.loggers import MLFlowLogger
 from torch.utils.data import DataLoader, Dataset
 import pytorch_lightning as pl
 from sklearn.preprocessing import MinMaxScaler
@@ -106,14 +107,22 @@ feature_columns += dummies
 # (c) Skalierung (MinMaxScaler nur auf Trainingsdaten fitten!)
 scaler_features = MinMaxScaler()
 scaler_targets = MinMaxScaler()
+# Konvertiere alle Feature- und Target-Spalten in float32
+train_df[feature_columns] = train_df[feature_columns].astype('float32')
+val_df[feature_columns] = val_df[feature_columns].astype('float32')
+test_df[feature_columns] = test_df[feature_columns].astype('float32')
 
-train_df[feature_columns] = scaler_features.fit_transform(train_df[feature_columns])
-val_df[feature_columns]   = scaler_features.transform(val_df[feature_columns])
-test_df[feature_columns]  = scaler_features.transform(test_df[feature_columns])
+train_df[target_columns] = train_df[target_columns].astype('float32')
+val_df[target_columns] = val_df[target_columns].astype('float32')
+test_df[target_columns] = test_df[target_columns].astype('float32')
 
-train_df[target_columns] = scaler_targets.fit_transform(train_df[target_columns])
-val_df[target_columns]   = scaler_targets.transform(val_df[target_columns])
-test_df[target_columns]  = scaler_targets.transform(test_df[target_columns])
+#train_df[feature_columns] = scaler_features.fit_transform(train_df[feature_columns])
+#val_df[feature_columns]   = scaler_features.transform(val_df[feature_columns])
+#test_df[feature_columns]  = scaler_features.transform(test_df[feature_columns])
+
+#train_df[target_columns] = scaler_targets.fit_transform(train_df[target_columns])
+#val_df[target_columns]   = scaler_targets.transform(val_df[target_columns])
+#test_df[target_columns]  = scaler_targets.transform(test_df[target_columns])
 
 # print the fitted scaler so that we can use it later
 import joblib
@@ -135,11 +144,17 @@ test_loader  = DataLoader(test_dataset,  batch_size=32, shuffle=False)
 # --- 4. Training starten ---
 if __name__ == '__main__':
     import mlflow
+    mlflow.set_experiment("Power Utilization Prediction")
+    mlf_logger = MLFlowLogger(
+        experiment_name="Power Utilization Prediction",
+        save_dir="./mlruns"  # Local directory for logs
+    )
+    mlflow.pytorch.autolog()
 
     model = UtilizationPredictor(
         input_size=len(feature_columns),
         hidden_size=128,
-        num_layers=2,
+        num_layers=4,
         output_size=len(target_columns),
         forecast_horizon=forecast_horizon,
         learning_rate=0.0001
@@ -152,10 +167,13 @@ if __name__ == '__main__':
         mode="min",
     )
     trainer = pl.Trainer(
-        max_epochs=100,         # deutlich mehr als 10
+        max_epochs=300,         # deutlich mehr als 10
         log_every_n_steps=1,
-        callbacks = [checkpoint_callback]
+        callbacks = [checkpoint_callback],
+        logger=mlf_logger,  # Attach MLflow logger
+
     )
 
     trainer.fit(model, train_loader, val_loader)
     trainer.test(model, test_loader)
+    mlflow.end_run()

@@ -35,7 +35,7 @@ def add_holidays(df):
 
     return df
 
-def create_nn_ds(dataset_path, weather_dataset_path):
+def create_nn_ds(dataset_path, weather_dataset_path, nn_dataset_path):
     df = pd.read_csv(dataset_path)
     weather_df = pd.read_csv(weather_dataset_path)
 
@@ -105,6 +105,6 @@ def create_nn_ds(dataset_path, weather_dataset_path):
     merged_df = pd.merge(merged_df, weather_df, left_on='hour', right_on='hourly_timestamp', how='left')
     merged_df = add_holidays(merged_df)
     merged_df.drop(columns=['hourly_timestamp'], inplace=True)
-    merged_df.to_csv('data/processed/hourly_avg_power.csv', index=False)
+    merged_df.to_csv(nn_dataset_path, index=False)
 
     return merged_df
