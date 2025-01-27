@@ -1,3 +1,9 @@
+*Exercise: Cluster Analysis: To better understand what typical charging sessions look like, carry out a cluster
+ analysis to provide management with a succinct report of archetypical charging events. Think of an
+ appropriate trade-off between explainability and information content and try to come up with names
+ for these clusters. What is the value of identifying different types of charging sessions?*
+
+
 **Data Preparation and Analysis Approach**:
 
 1.**Initial Decision and Feature Selection**: 

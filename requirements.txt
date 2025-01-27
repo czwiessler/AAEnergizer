@@ -6,3 +6,12 @@ scikit-learn
 jupyter
 pytz
 joblib
+torch
+# pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pytorch-lightning
+mlflow
+pmdarima
+plotly
+scikit-fda
+joblib
+pytz

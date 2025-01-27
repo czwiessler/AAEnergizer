@@ -27,8 +27,8 @@ for idx, row in data.iterrows():
 
     # Generate hourly periods overlapping the session in UTC
     session_hours = pd.date_range(
-        start=connect_time.floor('H'),
-        end=disconnect_time.ceil('H'),
+        start=connect_time.floor('h'),
+        end=disconnect_time.ceil('h'),
         freq='h',
         tz='UTC'
     )
@@ -104,6 +104,8 @@ plt.xlabel('Hour of Day')
 plt.ylabel('Utilization Rate (%)')
 plt.xticks(range(0, 24))
 
+
+ # this subplot shall hold "average of total drawn power (kw) per hour of day"
 plt.subplot(3, 1, 2)
 plt.plot(hourly_kpis['hour_of_day'], hourly_kpis['average_kWh_per_session'], marker='o', color='orange')
 plt.title('Average kWh per Session by Hour of Day')

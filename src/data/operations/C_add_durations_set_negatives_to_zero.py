@@ -7,10 +7,15 @@ def add_durations_set_negatives_to_zero(dataset_path):
     #set doneChargingTime = connectionTime when doneChargingTime < connectionTime (result -> durationUntilFullCharge = 0 when initially negative)
     dataFrame.loc[dataFrame["doneChargingTime"] < dataFrame["connectionTime"], "doneChargingTime"] = dataFrame["connectionTime"]
 
+    # gibts glaub ich garnet...
     #set disconnectTime = connectionTime when disconnectTime < connectionTime (result -> duration = 0 when initially negative)
     dataFrame.loc[dataFrame["disconnectTime"] < dataFrame["connectionTime"], "disconnectTime"] = dataFrame["connectionTime"]
 
-    #add "duation" column: whole time span the EV is CONNECTED
+    #...dafür gibts aber disconnectTime < doneChargingTime
+    # set disconnectTime = doneChargingTime when disconnectTime < doneChargingTime (result -> duration = 0 when initially negative)
+    dataFrame.loc[dataFrame["disconnectTime"] < dataFrame["doneChargingTime"], "doneChargingTime"] = dataFrame["disconnectTime"]
+
+    #add "duration" column: whole time span the EV is CONNECTED
     dataFrame["duration"] = (dataFrame["disconnectTime"] - dataFrame["connectionTime"])
 
     #add "doneChargingDuration" column: whole time span the EV is CHARGING
