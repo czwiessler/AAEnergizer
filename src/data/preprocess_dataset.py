@@ -40,7 +40,7 @@ def preprocess_dataset():
 
     HB_add_avg_min_max_KPIs.add_avg_min_max_KPIs(nn_dataset_path=nn_dataset_path, KPI_dataset_path=KPI_dataset_path)
 
-    I_prepare_nn_ds.prepare_nn_ds(dataset_path=nn_dataset_path)
+    I_prepare_nn_ds.prepare_nn_ds(nn_dataset_path=nn_dataset_path)
 
     Z_cut_ds.cut_ds(nn_dataset_path=nn_dataset_path, start_date="2018-09-05", end_date="2020-03-01")
 
