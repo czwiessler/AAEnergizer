@@ -149,7 +149,7 @@ if __name__ == "__main__":
     #dummies = ['day_of_week_0', 'day_of_week_1', 'day_of_week_2', 'day_of_week_3', 'day_of_week_4', 'day_of_week_5', 'day_of_week_6', 'hour_of_day_0', 'hour_of_day_1', 'hour_of_day_2', 'hour_of_day_3', 'hour_of_day_4', 'hour_of_day_5', 'hour_of_day_6', 'hour_of_day_7', 'hour_of_day_8', 'hour_of_day_9', 'hour_of_day_10', 'hour_of_day_11', 'hour_of_day_12', 'hour_of_day_13', 'hour_of_day_14', 'hour_of_day_15', 'hour_of_day_16', 'hour_of_day_17', 'hour_of_day_18', 'hour_of_day_19', 'hour_of_day_20', 'hour_of_day_21', 'hour_of_day_22', 'hour_of_day_23']
     dummies = ['day_of_week_0', 'day_of_week_1', 'day_of_week_2', 'day_of_week_3', 'day_of_week_4', 'day_of_week_5', 'day_of_week_6']
     input_columns += dummies
-    sequence_length = 240
+    sequence_length = 24
 
     # Testdaten laden
     df_test = pd.read_csv("data/processed/test_dataset_shifted.csv", parse_dates=["hour"])
@@ -167,7 +167,7 @@ if __name__ == "__main__":
     test_batches = prepare_24h_batches(df_test, start_hour=0)
 
     # Checkpoint-Pfad
-    ckpt_path = "models/24h-model-epoch=168-val_loss=30.85890.ckpt"
+    ckpt_path = "models/model_128_2_32_0.0010-epoch=77-val_loss=26.56100.ckpt"
 
     # Vorhersagen und Plot generieren
     generate_plots_for_24h_predictions(

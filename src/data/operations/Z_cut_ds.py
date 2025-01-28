@@ -16,4 +16,4 @@ def cut_ds(dataset_path, start_date, end_date):
     return filtered_dataset
 
 if __name__ == "__main__":
-    cut_ds("data/processed/hourly_avg_power.csv", "2018-04-25", "2020-03-01")
+    cut_ds("data/processed/hourly_avg_power.csv", "2018-09-05", "2020-03-01")
