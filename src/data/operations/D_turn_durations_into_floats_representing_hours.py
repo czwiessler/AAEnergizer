@@ -15,6 +15,7 @@ def turn_durations_into_floats_representing_hours(dataset_path):
     #save to csv
     dataFrame.to_csv(dataset_path, index=False)
 
+    print("D_: durations turned into floats representing hours")
 
 
 if __name__ == "__main__":

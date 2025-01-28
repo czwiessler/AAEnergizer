@@ -6,4 +6,4 @@ def copy_csv(from_path, to_path):
 
 
 if __name__ == "__main__":
-    copy_csv(from_path="data/raw/charging_sessions.csv", to_path="data/processed/charging_sessions_cleaned_copy.csv")
+    copy_csv(from_path="data/raw/charging_sessions.csv", to_path="data/processed/charging_sessions_cleaned.csv")

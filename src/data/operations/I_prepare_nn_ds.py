@@ -44,9 +44,9 @@ def interpolate_weather_data(weather_df):
 
 
 
-def prepare_nn_ds(dataset_path):
+def prepare_nn_ds(nn_dataset_path):
     # Load the dataset
-    df = pd.read_csv(dataset_path)
+    df = pd.read_csv(nn_dataset_path)
 
     # Add sine and cosine transformations for time and season
     df = add_sin_cos_time_features(df)
@@ -70,9 +70,9 @@ def prepare_nn_ds(dataset_path):
     df['day_of_week'] = df['hour'].dt.dayofweek
 
     # Save the updated DataFrame back to CSV
-    df.to_csv(dataset_path, index=False)
+    df.to_csv(nn_dataset_path, index=False)
 
     print("Dataset preparation completed.")
 
 if __name__ == "__main__":
-    prepare_nn_ds(dataset_path="data/processed/hourly_avg_power.csv")
+    prepare_nn_ds(nn_dataset_path="data/processed/hourly_avg_power.csv")

@@ -3,8 +3,8 @@ from winreg import HKEY_CLASSES_ROOT
 import src.data.operations.A_copy_csv as A_copy_csv
 import src.data.operations.B_remove_single_rows_with_implausible_timestamps as B_remove_single_rows_with_implausible_timestamps
 import src.data.operations.C_add_durations_set_negatives_to_zero as C_add_durations_set_negatives_to_zero
-import src.data.operations.CA_remove_duration_outliers as CA_remove_duration_outliers
 import src.data.operations.D_turn_durations_into_floats_representing_hours as D_turn_durations_into_floats_representing_hours
+import src.data.operations.DA_remove_duration_outliers as DA_remove_duration_outliers
 import src.data.operations.E_add_charging_power_remove_outliers as E_add_charging_power_remove_outliers
 import src.data.operations.F_remove_spaceID as F_remove_spaceID
 import src.data.operations.G_add_utilization as G_add_utilization
@@ -25,8 +25,8 @@ def preprocess_dataset():
     A_copy_csv.copy_csv(from_path=raw_dataset_path, to_path=processed_dataset_path)
     B_remove_single_rows_with_implausible_timestamps.remove_single_rows_with_implausible_timestamps(dataset_path=processed_dataset_path)
     C_add_durations_set_negatives_to_zero.add_durations_set_negatives_to_zero(dataset_path=processed_dataset_path)
-    CA_remove_duration_outliers.remove_duration_outliers(dataset_path=processed_dataset_path)
     D_turn_durations_into_floats_representing_hours.turn_durations_into_floats_representing_hours(dataset_path=processed_dataset_path)
+    DA_remove_duration_outliers.remove_duration_outliers(dataset_path=processed_dataset_path)
     E_add_charging_power_remove_outliers.add_charging_power_remove_outliers(dataset_path=processed_dataset_path)
     F_remove_spaceID.remove_spaceID(dataset_path=processed_dataset_path)
 
