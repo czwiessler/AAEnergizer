@@ -61,10 +61,10 @@ def prepare_nn_ds(dataset_path):
     #        'hour_of_day', 'hour_sin', 'hour_cos', 'season_num', 'season_sin',
     #        'season_cos'],
     #       dtype='object')
-    df = df[['hour', 'temperature', 'precipitation', 'is_holiday', 'is_weekend',
-             'is_vacation', 'season', 'hour_of_day', 'hour_sin', 'hour_cos',
-             'season_num', 'season_sin', 'season_cos', 'avgChargingPower_site_1',
-             'activeSessions_site_1', 'avgChargingPower_site_2', 'activeSessions_site_2']]
+    #df = df[['hour', 'temperature', 'precipitation', 'is_holiday', 'is_weekend',
+    #         'is_vacation', 'season', 'hour_of_day', 'hour_sin', 'hour_cos',
+    #         'season_num', 'season_sin', 'season_cos', 'avgChargingPower_site_1',
+    #         'activeSessions_site_1', 'chargingSessions_site_1', 'avgChargingPower_site_2', 'activeSessions_site_2', 'chargingSessions_site_2']]
 
     # add the column 'day_of_week' to the dataframe, so monday is 0 and sunday is 6
     df['day_of_week'] = df['hour'].dt.dayofweek

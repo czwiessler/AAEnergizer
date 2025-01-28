@@ -41,8 +41,12 @@ def create_nn_ds(dataset_path, weather_dataset_path, nn_dataset_path):
 
     df['connectionTime'] = pd.to_datetime(df['connectionTime'])
     df['disconnectTime'] = pd.to_datetime(df['disconnectTime'])
+    df['doneChargingTime'] = pd.to_datetime(df['doneChargingTime'])
     weather_df['timestamp'] = pd.to_datetime(weather_df['timestamp']) - pd.Timedelta(hours=8)
     weather_df['hourly_timestamp'] = weather_df['timestamp'].dt.floor('h')
+
+    ############# set disconnectTime where doneChargingTime is null #############
+    df.loc[df['doneChargingTime'].isna(), 'doneChargingTime'] = df['disconnectTime']
 
     weather_df = weather_df.groupby('hourly_timestamp').agg({
         'temperature': 'mean',
@@ -75,10 +79,16 @@ def create_nn_ds(dataset_path, weather_dataset_path, nn_dataset_path):
                 (site_df['connectionTime'] < end_time) & (site_df['disconnectTime'] > start_time)
                 ]
 
-            avg_power = active_sessions['chargingPower'].mean() if not active_sessions.empty else 0
+            charging_sessions = site_df[
+                (site_df['connectionTime'] < end_time) & (site_df['doneChargingTime'] > start_time)
+                ]
+
+            avg_power = charging_sessions['chargingPower'].mean() if not charging_sessions.empty else 0
+            charging_sessions_count = len(charging_sessions)
             active_session_count = len(active_sessions)
 
             row[f'avgChargingPower_site_{site_id}'] = avg_power
+            row[f'chargingSessions_site_{site_id}'] = charging_sessions_count
             row[f'activeSessions_site_{site_id}'] = active_session_count
 
         hourly_data.append(row)
@@ -98,5 +108,6 @@ def create_nn_ds(dataset_path, weather_dataset_path, nn_dataset_path):
 
     # Speichern der Ergebnisse
     hourly_df.to_csv(nn_dataset_path, index=False)
+    print("hourly data for prediction and aggregated visualization saved to ", nn_dataset_path)
 
     return hourly_df
