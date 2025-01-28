@@ -10,6 +10,8 @@ def add_drawn_power_and_rates(nn_dataset_path, dataset_path):
     site_1_total_stations = session_data[session_data['siteID'] == 1]['stationID'].nunique()
     site_2_total_stations = session_data[session_data['siteID'] == 2]['stationID'].nunique()
 
+    print(f"site 1 station count: {site_1_total_stations}, site 2 station count: {site_2_total_stations}")
+
     df = pd.read_csv(nn_dataset_path)
 
     # Add 'total_drawn_power' columns

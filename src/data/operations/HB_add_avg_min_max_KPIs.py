@@ -13,6 +13,7 @@ def add_avg_min_max_KPIs(nn_dataset_path, KPI_dataset_path):
 
     #relevant columns
     relevant_columns = [
+        'activeSessions_site_1', 'activeSessions_site_2',
         'utilization_rate_1', 'utilization_rate_2',
         'total_drawn_power_1', 'total_drawn_power_2',
         'idle_rate_1', 'idle_rate_2'
