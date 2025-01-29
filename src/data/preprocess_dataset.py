@@ -1,6 +1,7 @@
 from winreg import HKEY_CLASSES_ROOT
 
 import src.data.operations.A_copy_csv as A_copy_csv
+import src.data.operations.AA_remove_duplicates as AA_remove_duplicates
 import src.data.operations.B_remove_single_rows_with_implausible_timestamps as B_remove_single_rows_with_implausible_timestamps
 import src.data.operations.C_add_durations_set_negatives_to_zero as C_add_durations_set_negatives_to_zero
 import src.data.operations.D_turn_durations_into_floats_representing_hours as D_turn_durations_into_floats_representing_hours
@@ -23,6 +24,7 @@ def preprocess_dataset():
     KPI_dataset_path = "data/processed/daily_avg_min_max_KPIs.csv"
 
     A_copy_csv.copy_csv(from_path=raw_dataset_path, to_path=processed_dataset_path)
+    AA_remove_duplicates.remove_duplicates(dataset_path=processed_dataset_path)
     B_remove_single_rows_with_implausible_timestamps.remove_single_rows_with_implausible_timestamps(dataset_path=processed_dataset_path)
     C_add_durations_set_negatives_to_zero.add_durations_set_negatives_to_zero(dataset_path=processed_dataset_path)
     D_turn_durations_into_floats_representing_hours.turn_durations_into_floats_representing_hours(dataset_path=processed_dataset_path)
