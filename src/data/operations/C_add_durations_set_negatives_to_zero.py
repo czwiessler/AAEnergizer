@@ -24,6 +24,7 @@ def add_durations_set_negatives_to_zero(dataset_path):
     #save to csv
     dataFrame.to_csv(dataset_path, index=False)
 
+    print("C_: durations added, small implausible offsets handled")
 
 
 if __name__ == "__main__":

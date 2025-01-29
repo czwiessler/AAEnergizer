@@ -1,13 +1,17 @@
 from winreg import HKEY_CLASSES_ROOT
 
 import src.data.operations.A_copy_csv as A_copy_csv
+import src.data.operations.AA_remove_duplicates as AA_remove_duplicates
 import src.data.operations.B_remove_single_rows_with_implausible_timestamps as B_remove_single_rows_with_implausible_timestamps
 import src.data.operations.C_add_durations_set_negatives_to_zero as C_add_durations_set_negatives_to_zero
 import src.data.operations.D_turn_durations_into_floats_representing_hours as D_turn_durations_into_floats_representing_hours
+import src.data.operations.DA_remove_duration_outliers as DA_remove_duration_outliers
 import src.data.operations.E_add_charging_power_remove_outliers as E_add_charging_power_remove_outliers
 import src.data.operations.F_remove_spaceID as F_remove_spaceID
 import src.data.operations.G_add_utilization as G_add_utilization
 import src.data.operations.H_create_nn_ds as H_create_nn_ds
+import src.data.operations.HA_add_drawn_power_and_rates as HA_add_drawn_power_and_rates
+import src.data.operations.HB_add_avg_min_max_KPIs as HB_add_avg_min_max_KPIs
 import src.data.operations.I_prepare_nn_ds as I_prepare_nn_ds
 import src.data.operations.Z_cut_ds as Z_cut_ds
 import pandas as pd
@@ -17,11 +21,14 @@ def preprocess_dataset():
     raw_weather_dataset_path = "data/raw/weather_burbank_airport.csv"
     processed_dataset_path = "data/processed/charging_sessions_cleaned.csv"
     nn_dataset_path = "data/processed/hourly_avg_power.csv"
+    KPI_dataset_path = "data/processed/daily_avg_min_max_KPIs.csv"
 
     A_copy_csv.copy_csv(from_path=raw_dataset_path, to_path=processed_dataset_path)
+    AA_remove_duplicates.remove_duplicates(dataset_path=processed_dataset_path)
     B_remove_single_rows_with_implausible_timestamps.remove_single_rows_with_implausible_timestamps(dataset_path=processed_dataset_path)
     C_add_durations_set_negatives_to_zero.add_durations_set_negatives_to_zero(dataset_path=processed_dataset_path)
     D_turn_durations_into_floats_representing_hours.turn_durations_into_floats_representing_hours(dataset_path=processed_dataset_path)
+    DA_remove_duration_outliers.remove_duration_outliers(dataset_path=processed_dataset_path)
     E_add_charging_power_remove_outliers.add_charging_power_remove_outliers(dataset_path=processed_dataset_path)
     F_remove_spaceID.remove_spaceID(dataset_path=processed_dataset_path)
 
@@ -31,9 +38,13 @@ def preprocess_dataset():
                                 weather_dataset_path=raw_weather_dataset_path,
                                 nn_dataset_path=nn_dataset_path)
 
-    I_prepare_nn_ds.prepare_nn_ds(dataset_path=nn_dataset_path)
+    HA_add_drawn_power_and_rates.add_drawn_power_and_rates(nn_dataset_path=nn_dataset_path, dataset_path=processed_dataset_path)
 
-    Z_cut_ds.cut_ds(dataset_path=nn_dataset_path, start_date="2018-09-05", end_date="2020-03-01")
+    HB_add_avg_min_max_KPIs.add_avg_min_max_KPIs(nn_dataset_path=nn_dataset_path, KPI_dataset_path=KPI_dataset_path)
+
+    I_prepare_nn_ds.prepare_nn_ds(nn_dataset_path=nn_dataset_path)
+
+    Z_cut_ds.cut_ds(nn_dataset_path=nn_dataset_path, start_date="2018-09-05", end_date="2020-03-01")
 
     print("Preprocessing done.")
 

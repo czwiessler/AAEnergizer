@@ -49,6 +49,7 @@ def add_charging_power_remove_outliers(dataset_path):
     #save to csv
     dataFrame.to_csv(dataset_path, index=False)
 
+    print("E_: Added chargingPower and removed outliers.")
 
 
 if __name__ == "__main__":

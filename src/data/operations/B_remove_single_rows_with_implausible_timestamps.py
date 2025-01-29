@@ -17,5 +17,7 @@ def remove_single_rows_with_implausible_timestamps(dataset_path):
 
     df.to_csv(dataset_path, index=False)
 
+    print("B_: rows removed")
+
 if __name__ == "__main__":
     remove_single_rows_with_implausible_timestamps(dataset_path="data/processed/charging_sessions_cleaned.csv")

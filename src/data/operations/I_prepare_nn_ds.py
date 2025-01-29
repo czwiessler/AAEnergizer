@@ -44,9 +44,9 @@ def interpolate_weather_data(weather_df):
 
 
 
-def prepare_nn_ds(dataset_path):
+def prepare_nn_ds(nn_dataset_path):
     # Load the dataset
-    df = pd.read_csv(dataset_path)
+    df = pd.read_csv(nn_dataset_path)
 
     # Add sine and cosine transformations for time and season
     df = add_sin_cos_time_features(df)
@@ -61,18 +61,18 @@ def prepare_nn_ds(dataset_path):
     #        'hour_of_day', 'hour_sin', 'hour_cos', 'season_num', 'season_sin',
     #        'season_cos'],
     #       dtype='object')
-    df = df[['hour', 'temperature', 'precipitation', 'is_holiday', 'is_weekend',
-             'is_vacation', 'season', 'hour_of_day', 'hour_sin', 'hour_cos',
-             'season_num', 'season_sin', 'season_cos', 'avgChargingPower_site_1',
-             'activeSessions_site_1', 'avgChargingPower_site_2', 'activeSessions_site_2']]
+    #df = df[['hour', 'temperature', 'precipitation', 'is_holiday', 'is_weekend',
+    #         'is_vacation', 'season', 'hour_of_day', 'hour_sin', 'hour_cos',
+    #         'season_num', 'season_sin', 'season_cos', 'avgChargingPower_site_1',
+    #         'activeSessions_site_1', 'chargingSessions_site_1', 'avgChargingPower_site_2', 'activeSessions_site_2', 'chargingSessions_site_2']]
 
     # add the column 'day_of_week' to the dataframe, so monday is 0 and sunday is 6
     df['day_of_week'] = df['hour'].dt.dayofweek
 
     # Save the updated DataFrame back to CSV
-    df.to_csv(dataset_path, index=False)
+    df.to_csv(nn_dataset_path, index=False)
 
     print("Dataset preparation completed.")
 
 if __name__ == "__main__":
-    prepare_nn_ds(dataset_path="data/processed/hourly_avg_power.csv")
+    prepare_nn_ds(nn_dataset_path="data/processed/hourly_avg_power.csv")

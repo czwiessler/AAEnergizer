@@ -9,6 +9,7 @@ def remove_spaceID(dataset_path):
     # Save to csv
     dataFrame.to_csv(dataset_path, index=False)
 
+    print("F_: Removed spaceID column")
 
 
 if __name__ == "__main__":
