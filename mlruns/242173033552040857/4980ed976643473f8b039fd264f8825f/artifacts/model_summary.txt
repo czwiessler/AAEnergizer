@@ -1,0 +1,12 @@
+  | Name      | Type    | Params | Mode 
+----------------------------------------------
+0 | lstm      | LSTM    | 468 K  | train
+1 | fc        | Linear  | 12.4 K | train
+2 | criterion | MSELoss | 0      | train
+----------------------------------------------
+481 K     Trainable params
+0         Non-trainable params
+481 K     Total params
+1.926     Total estimated model params size (MB)
+3         Modules in train mode
+0         Modules in eval mode
